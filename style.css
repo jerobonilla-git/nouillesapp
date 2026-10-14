@@ -79,11 +79,31 @@ h1 { font-size: 20px; margin: 0 0 12px; }
 }
 .tile.soon { opacity: 0.6; background: #5f5f6a; font-size: 12px; }
 
-.art-home-tile .tile:not(.soon) {
-  background: none;
-  border: calc(8px * var(--scale)) solid transparent;
-  border-image: var(--img-home-tile) 8 fill / calc(8px * var(--scale)) stretch;
+/* Main feature tile (Courses, later Friends, Plants...): a FIXED-size 160x90 picture shown
+   at x2 (320x180), with the name as plain text below it. Same size for every feature. */
+.feature-tile {
+  display: block;
+  width: calc(160px * 2);
+  max-width: 100%;              /* on a very narrow phone it shrinks instead of overflowing */
+  margin-bottom: 16px;
+  color: var(--text);
+  text-decoration: none;
 }
+.feature-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;         /* keeps the 160x90 shape */
+  background: var(--grey);      /* grey box until the picture exists */
+  background-size: 100% 100%;
+}
+.art-home-tile-courses .feature-art { background-image: var(--img-home-tile-courses); background-color: transparent; }
+.feature-label {
+  display: block;
+  margin-top: 8px;
+  font-size: 16px;
+  text-align: center;
+}
+
 .art-home-tile-soon .tile.soon {
   background: none;
   opacity: 1;
@@ -243,10 +263,10 @@ header h1 { margin: 0; }
 
 /* Things that carry a badge need to be a "positioned" box so the badge can sit in their corner.
    (The .bar, #big-add and #add-form are already positioned: fixed.) */
-.tile, .row, .check, #add-ok, .app-logo { position: relative; }
+.tile, .row, .check, #add-ok, .app-logo, .feature-art { position: relative; }
 
 /* Shared badge look (nothing shows until a rule below gives it some content) */
-.tile::after, .row::after, .bar::after, .check::after,
+.tile::after, .feature-art::after, .row::after, .bar::after, .check::after,
 #big-add::after, #add-ok::after, .app-logo::after, body::after {
   position: absolute;
   padding: 2px 4px;
@@ -262,14 +282,14 @@ header h1 { margin: 0; }
 }
 
 /* Big things get the badge in their top-right corner */
-.tile::after, .row::after, .bar::after { top: 0; right: 0; }
+.tile::after, .feature-art::after, .row::after, .bar::after { top: 0; right: 0; }
 /* Small things (buttons, checkbox) in their top-left corner */
 .check::after, #big-add::after, #add-ok::after, .app-logo::after { top: 0; left: 0; }
 /* The page background has no corner of its own: badge sits in the bottom-left of the screen */
 body::after { position: fixed; left: 0; bottom: 0; }
 
 /* 1 */ .ph-home-background body::after { content: var(--num-home-background); }
-/* 2 */ .ph-home-tile .tile:not(.soon)::after { content: var(--num-home-tile); }
+/* 2 */ .ph-home-tile-courses .feature-art::after { content: var(--num-home-tile-courses); }
 /* 3 */ .ph-home-tile-soon .tile.soon::after { content: var(--num-home-tile-soon); }
 /* 4 */ .ph-courses-row-panel .row::after,
         .ph-courses-row-panel .bar::after { content: var(--num-courses-row-panel); }
