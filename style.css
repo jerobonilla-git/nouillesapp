@@ -53,10 +53,10 @@ h1 { font-size: 20px; margin: 0 0 12px; }
 
 #status { font-size: 8px; opacity: 0.7; margin: 0 0 16px; }
 
-/* ---------- Panels: rows, home tiles and the undo bar share this look ----------
+/* ---------- Panels: rows and the undo bar share this look ----------
    Placeholder: grey box.
    With art: 9-slice, meaning the 8px corners stay crisp and the middle stretches. */
-.row, .bar, .tile {
+.row, .bar {
   background: var(--grey);
   color: #111;
 }
@@ -68,17 +68,6 @@ h1 { font-size: 20px; margin: 0 0 12px; }
 }
 
 /* ---------- Home screen tiles ---------- */
-.tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 140px;
-  margin-bottom: 16px;
-  font-size: 16px;
-  text-decoration: none;
-}
-.tile.soon { opacity: 0.6; background: #5f5f6a; font-size: 12px; }
-
 /* Main feature tile (Courses, later Friends, Plants...): a FIXED-size 160x90 picture shown
    at x2 (320x180), with the name as plain text below it. Same size for every feature. */
 .feature-tile {
@@ -96,7 +85,7 @@ h1 { font-size: 20px; margin: 0 0 12px; }
   background: var(--grey);      /* grey box until the picture exists */
   background-size: 100% 100%;
 }
-.art-home-tile-courses .feature-art { background-image: var(--img-home-tile-courses); background-color: transparent; }
+.art-home-tile-courses .feature-tile.courses .feature-art { background-image: var(--img-home-tile-courses); background-color: transparent; }
 .feature-label {
   display: block;
   margin-top: 8px;
@@ -104,12 +93,10 @@ h1 { font-size: 20px; margin: 0 0 12px; }
   text-align: center;
 }
 
-.art-home-tile-soon .tile.soon {
-  background: none;
-  opacity: 1;
-  border: calc(8px * var(--scale)) solid transparent;
-  border-image: var(--img-home-tile-soon) 8 fill / calc(8px * var(--scale)) stretch;
-}
+/* The soon tile: same fixed 160x90 shape as a feature tile, but not tappable yet */
+.feature-tile.soon { cursor: default; }
+.feature-tile.soon .feature-label { opacity: 0.6; }
+.art-home-tile-soon .feature-tile.soon .feature-art { background-image: var(--img-home-tile-soon); background-color: transparent; }
 
 /* ---------- App icon next to the title on Home ----------
    32x32 sprite shown at its own size (x1). Grey box until art exists. */
@@ -263,10 +250,10 @@ header h1 { margin: 0; }
 
 /* Things that carry a badge need to be a "positioned" box so the badge can sit in their corner.
    (The .bar, #big-add and #add-form are already positioned: fixed.) */
-.tile, .row, .check, #add-ok, .app-logo, .feature-art { position: relative; }
+.row, .check, #add-ok, .app-logo, .feature-art { position: relative; }
 
 /* Shared badge look (nothing shows until a rule below gives it some content) */
-.tile::after, .feature-art::after, .row::after, .bar::after, .check::after,
+.feature-art::after, .row::after, .bar::after, .check::after,
 #big-add::after, #add-ok::after, .app-logo::after, body::after {
   position: absolute;
   padding: 2px 4px;
@@ -282,15 +269,15 @@ header h1 { margin: 0; }
 }
 
 /* Big things get the badge in their top-right corner */
-.tile::after, .feature-art::after, .row::after, .bar::after { top: 0; right: 0; }
+.feature-art::after, .row::after, .bar::after { top: 0; right: 0; }
 /* Small things (buttons, checkbox) in their top-left corner */
 .check::after, #big-add::after, #add-ok::after, .app-logo::after { top: 0; left: 0; }
 /* The page background has no corner of its own: badge sits in the bottom-left of the screen */
 body::after { position: fixed; left: 0; bottom: 0; }
 
 /* 1 */ .ph-home-background body::after { content: var(--num-home-background); }
-/* 2 */ .ph-home-tile-courses .feature-art::after { content: var(--num-home-tile-courses); }
-/* 3 */ .ph-home-tile-soon .tile.soon::after { content: var(--num-home-tile-soon); }
+/* 2 */ .ph-home-tile-courses .feature-tile.courses .feature-art::after { content: var(--num-home-tile-courses); }
+/* 3 */ .ph-home-tile-soon .feature-tile.soon .feature-art::after { content: var(--num-home-tile-soon); }
 /* 4 */ .ph-courses-row-panel .row::after,
         .ph-courses-row-panel .bar::after { content: var(--num-courses-row-panel); }
 /* 5 */ .ph-courses-checkbox-empty .check::after { content: var(--num-courses-checkbox-empty); }

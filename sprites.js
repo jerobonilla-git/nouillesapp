@@ -12,7 +12,7 @@
 const SPRITES = {
   "home-background":               { n: 1, file: "art/backgrounds/home-background.png" },               // 16x16, repeats
   "home-tile-courses":             { n: 2, file: "art/ui/home-tile-courses.png" },                      // 160x90 fixed picture (one per main feature)
-  "home-tile-soon":                { n: 3, file: "art/ui/home-tile-soon.png" },                         // 24x24, 9-slice
+  "home-tile-soon":                { n: 3, file: "art/ui/home-tile-soon.png" },                         // 160x90 fixed picture (stand-in for the next feature)
   "courses-row-panel":             { n: 4, file: "art/ui/courses-row-panel.png" },                      // 24x24, 9-slice
   "courses-checkbox-empty":        { n: 5, file: "art/ui/courses-checkbox-empty.png" },                 // 16x16
   "courses-checkbox-ticked":       { n: 6, file: "art/ui/courses-checkbox-ticked.png" },                // 16x16
