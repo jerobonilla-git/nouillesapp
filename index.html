@@ -19,21 +19,44 @@
 </head>
 <body>
   <main>
-    <h1>To buy</h1>
-
     <!-- Small status line: "synced", "offline", or "local mode" -->
     <p id="status">starting...</p>
 
-    <!-- The add form: a text box and the add button -->
-    <form id="add-form" autocomplete="off">
-      <input id="new-item" type="text" placeholder="milk, bread..." maxlength="80" required>
-      <button id="add-btn" type="submit" aria-label="Add item"></button>
-    </form>
+    <!-- SCREEN 1: Home. One big tile per feature. -->
+    <section id="home">
+      <h1>NouillesApp</h1>
+      <!-- A link to #courses: app.js shows the Courses screen when the address ends in #courses -->
+      <a class="tile" href="#courses">Courses</a>
+      <!-- A greyed-out tile so we can see where the next feature will go -->
+      <div class="tile soon">soon</div>
+    </section>
 
-    <!-- The list. app.js fills this with one <li> per item -->
-    <ul id="list"></ul>
+    <!-- SCREEN 2: Courses (the shopping list) -->
+    <section id="courses" hidden>
+      <header>
+        <a id="back" href="#home" aria-label="Back to home">&lt;</a>
+        <h1>Courses</h1>
+      </header>
 
-    <p id="empty" hidden>Nothing to buy yet.</p>
+      <!-- The list. app.js fills this with one <li> per item that is not done -->
+      <ul id="list"></ul>
+      <p id="empty" hidden>Nothing to buy yet.</p>
+
+      <!-- Bar that appears for ~4 seconds after you tick an item -->
+      <div id="undo-bar" class="bar" hidden>
+        <span id="undo-text"></span>
+        <button id="undo-btn" type="button">Undo</button>
+      </div>
+
+      <!-- Add form: hidden until you tap the big + -->
+      <form id="add-form" autocomplete="off" hidden>
+        <input id="new-item" type="text" placeholder="PQ, lait..." maxlength="80" required>
+        <button id="add-ok" type="submit" aria-label="Add item"></button>
+      </form>
+
+      <!-- The big + button at the bottom -->
+      <button id="big-add" type="button" aria-label="Add an item">+</button>
+    </section>
   </main>
 
   <!-- Order matters: the Supabase library, then our files -->

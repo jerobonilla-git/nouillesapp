@@ -12,6 +12,9 @@
 /* Keeps pixel art crisp, never blurry. Applies to everything. */
 * { image-rendering: pixelated; }
 
+/* The "hidden" attribute must always win, even over display: flex below */
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   background: var(--bg);
@@ -29,67 +32,73 @@ body {
 main {
   max-width: 480px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 24px 16px 220px;  /* big bottom space so the fixed buttons never cover the list */
 }
 
 h1 { font-size: 20px; margin: 0 0 12px; }
 
 #status { font-size: 8px; opacity: 0.7; margin: 0 0 16px; }
 
-/* ---------- Add form ---------- */
-#add-form { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
-
-#new-item {
-  flex: 1;
-  min-width: 0;
-  height: 48px;
-  padding: 0 12px;
-  font-family: inherit;
-  font-size: 12px;
-  border: 3px solid #000;
-  background: #fff;
-}
-
-/* Add button: 16x16 sprite shown at 48x48. Grey box until art exists. */
-#add-btn {
-  width: calc(16px * var(--scale));
-  height: calc(16px * var(--scale));
-  padding: 0;
-  border: 0;
+/* ---------- Panels: rows, home tiles and the undo bar share this look ----------
+   Placeholder: grey box.
+   With art: 9-slice, meaning the 8px corners stay crisp and the middle stretches. */
+.row, .bar, .tile {
   background: var(--grey);
-  background-size: 100% 100%;
-  cursor: pointer;
+  color: #111;
 }
-.art-btn-add #add-btn { background-image: var(--img-btn-add); background-color: transparent; }
-#add-btn:active { background: #5a5a5a; }
-.art-btn-add-pressed #add-btn:active {
-  background-image: var(--img-btn-add-pressed);
-  background-color: transparent;
+.art-panel-row .row,
+.art-panel-row .bar {
+  background: none;
+  border: calc(8px * var(--scale)) solid transparent;
+  border-image: var(--img-panel-row) 8 fill / calc(8px * var(--scale)) stretch;
 }
+
+/* ---------- Home screen tiles ---------- */
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  text-decoration: none;
+}
+.tile.soon { opacity: 0.6; background: #5f5f6a; font-size: 12px; }
+
+.art-tile-feature .tile:not(.soon) {
+  background: none;
+  border: calc(8px * var(--scale)) solid transparent;
+  border-image: var(--img-tile-feature) 8 fill / calc(8px * var(--scale)) stretch;
+}
+.art-tile-soon .tile.soon {
+  background: none;
+  opacity: 1;
+  border: calc(8px * var(--scale)) solid transparent;
+  border-image: var(--img-tile-soon) 8 fill / calc(8px * var(--scale)) stretch;
+}
+
+/* ---------- Courses header ---------- */
+header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+header h1 { margin: 0; }
+#back { color: var(--text); text-decoration: none; font-size: 20px; padding: 8px; }
 
 /* ---------- List rows ---------- */
 #list { list-style: none; margin: 0; padding: 0; }
 
-/* Each row is a "panel". Placeholder: grey box.
-   With art: 9-slice, meaning the 8px corners stay crisp and the middle stretches. */
 .row {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 8px;
   padding: 8px 12px;
-  background: var(--grey);
-  color: #111;
+  transition: opacity 0.3s;
 }
-.art-panel-row .row {
-  background: none;
-  border: calc(8px * var(--scale)) solid transparent;
-  border-image: var(--img-panel-row) 8 fill / calc(8px * var(--scale)) stretch;
-  padding: 0 4px;
-}
+.art-panel-row .row { padding: 0 4px; }
+
+/* When you tick an item it fades out for 0.3 s before it disappears */
+.row.fading { opacity: 0; }
 
 .row .label { flex: 1; word-break: break-word; line-height: 1.4; }
-.row.done .label { text-decoration: line-through; opacity: 0.5; }
 
 /* Checkbox: 16x16 sprite at 48x48. Grey box until art exists. */
 .check {
@@ -102,21 +111,100 @@ h1 { font-size: 20px; margin: 0 0 12px; }
   background-size: 100% 100%;
   cursor: pointer;
 }
-.row.done .check { background: #555; }
+/* While fading, the box already looks ticked */
+.row.fading .check { background: #555; }
 .art-checkbox-empty .check { background-image: var(--img-checkbox-empty); border: 0; background-color: transparent; }
-.art-checkbox-ticked .row.done .check { background-image: var(--img-checkbox-ticked); }
+.art-checkbox-ticked .row.fading .check { background-image: var(--img-checkbox-ticked); }
 
-/* Delete button: plain text "x" for now (V1 has no delete sprite in the art list) */
-.del {
-  flex: none;
-  width: 36px;
-  height: 36px;
-  border: 3px solid #333;
-  background: transparent;
-  color: #111;
+#empty { opacity: 0.6; text-align: center; margin-top: 32px; }
+
+/* ---------- Bottom of the Courses screen (all fixed to the screen bottom) ---------- */
+
+/* Undo bar: sits above the + button */
+.bar {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 140px;
+  max-width: 448px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  min-height: 48px;
+}
+#undo-btn {
   font-family: inherit;
   font-size: 12px;
+  padding: 8px 12px;
+  border: 3px solid #111;
+  background: #fff;
+  color: #111;
   cursor: pointer;
 }
 
-#empty { opacity: 0.6; text-align: center; margin-top: 32px; }
+/* The big + : 16x16 sprite shown at x6 = 96x96. Grey box with a "+" until art exists. */
+#big-add {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  width: calc(16px * 6);
+  height: calc(16px * 6);
+  transform: translateX(-50%);
+  padding: 0;
+  border: 0;
+  background: var(--grey);
+  background-size: 100% 100%;
+  color: #111;
+  font-family: inherit;
+  font-size: 32px;
+  cursor: pointer;
+}
+.art-btn-add #big-add { background-image: var(--img-btn-add); background-color: transparent; font-size: 0; }
+#big-add:active { background-color: #5a5a5a; }
+.art-btn-add-pressed #big-add:active {
+  background-image: var(--img-btn-add-pressed);
+  background-color: transparent;
+}
+
+/* Add form: replaces the big + while you type */
+#add-form {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 24px;
+  max-width: 448px;
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+#new-item {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 12px;
+  border: 3px solid #000;
+  background: #fff;
+}
+/* Confirm button: same sprite as +, at x3 = 48x48 */
+#add-ok {
+  width: calc(16px * var(--scale));
+  height: calc(16px * var(--scale));
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: var(--grey);
+  background-size: 100% 100%;
+  cursor: pointer;
+}
+.art-btn-add #add-ok { background-image: var(--img-btn-add); background-color: transparent; }
+#add-ok:active { background-color: #5a5a5a; }
+.art-btn-add-pressed #add-ok:active {
+  background-image: var(--img-btn-add-pressed);
+  background-color: transparent;
+}

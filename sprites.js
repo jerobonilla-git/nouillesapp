@@ -12,6 +12,8 @@ const SPRITES = {
   "btn-add":           "art/ui/btn-add.png",            // 16x16
   "btn-add-pressed":   "art/ui/btn-add-pressed.png",    // 16x16
   "tile":              "art/backgrounds/tile.png",      // 16x16, repeats
+  "tile-feature":      "art/ui/tile-feature.png",       // 24x24, 9-slice, home screen tile
+  "tile-soon":         "art/ui/tile-soon.png",          // 24x24, 9-slice, greyed "coming soon" tile
 };
 
 // For each sprite, try to load the PNG.
