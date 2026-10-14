@@ -18,8 +18,7 @@ const SPRITES = {
   "courses-checkbox-ticked":       { n: 6, file: "art/ui/courses-checkbox-ticked.png" },                // 16x16
   "courses-add-button":            { n: 7, file: "art/ui/courses-add-button.png" },                     // 16x16
   "courses-add-button-pressed":    { n: 8, file: "art/ui/courses-add-button-pressed.png" },             // 16x16
-  // n = 9 is icons/app-icon.png. It only shows on the phone home screen
-  // (listed in manifest.json), so there is no badge for it on screen.
+  "app-icon":                      { n: 9, file: "art/icons/app-icon.png" },                          // 32x32, next to the title on Home (and the phone's home screen icon)
 };
 
 // The placeholder PNGs are made with a known look: dark border pixel at the

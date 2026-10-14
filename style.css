@@ -91,6 +91,18 @@ h1 { font-size: 20px; margin: 0 0 12px; }
   border-image: var(--img-home-tile-soon) 8 fill / calc(8px * var(--scale)) stretch;
 }
 
+/* ---------- App icon next to the title on Home ----------
+   32x32 sprite shown at its own size (x1). Grey box until art exists. */
+#home h1 { display: flex; align-items: center; gap: 12px; }
+.app-logo {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  background: var(--grey);
+  background-size: 100% 100%;
+}
+.art-app-icon .app-logo { background-image: var(--img-app-icon); background-color: transparent; }
+
 /* ---------- Courses header ---------- */
 header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
 header h1 { margin: 0; }
@@ -231,11 +243,11 @@ header h1 { margin: 0; }
 
 /* Things that carry a badge need to be a "positioned" box so the badge can sit in their corner.
    (The .bar, #big-add and #add-form are already positioned: fixed.) */
-.tile, .row, .check, #add-ok { position: relative; }
+.tile, .row, .check, #add-ok, .app-logo { position: relative; }
 
 /* Shared badge look (nothing shows until a rule below gives it some content) */
 .tile::after, .row::after, .bar::after, .check::after,
-#big-add::after, #add-ok::after, body::after {
+#big-add::after, #add-ok::after, .app-logo::after, body::after {
   position: absolute;
   padding: 2px 4px;
   background: #d22;
@@ -252,7 +264,7 @@ header h1 { margin: 0; }
 /* Big things get the badge in their top-right corner */
 .tile::after, .row::after, .bar::after { top: 0; right: 0; }
 /* Small things (buttons, checkbox) in their top-left corner */
-.check::after, #big-add::after, #add-ok::after { top: 0; left: 0; }
+.check::after, #big-add::after, #add-ok::after, .app-logo::after { top: 0; left: 0; }
 /* The page background has no corner of its own: badge sits in the bottom-left of the screen */
 body::after { position: fixed; left: 0; bottom: 0; }
 
@@ -269,3 +281,4 @@ body::after { position: fixed; left: 0; bottom: 0; }
 /* 8 (only while the button is held down) */
         .ph-courses-add-button-pressed #big-add:active::after,
         .ph-courses-add-button-pressed #add-ok:active::after { content: var(--num-courses-add-button-pressed); }
+/* 9 */ .ph-app-icon .app-logo::after { content: var(--num-app-icon); }
