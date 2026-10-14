@@ -74,7 +74,7 @@ h1 { font-size: 20px; margin: 0 0 12px; }
   display: block;
   width: calc(160px * 2);
   max-width: 100%;              /* on a very narrow phone it shrinks instead of overflowing */
-  margin-bottom: 16px;
+  margin: 0 auto 16px;          /* centered in the column, so picture and label share one center line */
   color: var(--text);
   text-decoration: none;
 }
