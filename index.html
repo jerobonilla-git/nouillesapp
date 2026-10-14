@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Makes the page fit a phone screen -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>NouillesApp</title>
+
+  <!-- PWA bits: manifest = "install me" info, theme-color = browser bar color -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2b2b3a">
+
+  <!-- Free pixel font for titles (falls back to monospace if offline) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>To buy</h1>
+
+    <!-- Small status line: "synced", "offline", or "local mode" -->
+    <p id="status">starting...</p>
+
+    <!-- The add form: a text box and the add button -->
+    <form id="add-form" autocomplete="off">
+      <input id="new-item" type="text" placeholder="milk, bread..." maxlength="80" required>
+      <button id="add-btn" type="submit" aria-label="Add item"></button>
+    </form>
+
+    <!-- The list. app.js fills this with one <li> per item -->
+    <ul id="list"></ul>
+
+    <p id="empty" hidden>Nothing to buy yet.</p>
+  </main>
+
+  <!-- Order matters: the Supabase library, then our files -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="sprites.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

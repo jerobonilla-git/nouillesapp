@@ -1,0 +1,122 @@
+/* Every sprite is drawn at 1x and scaled up with CSS.
+   SCALE = how many times bigger (3 means a 16px sprite shows as 48px). */
+:root {
+  --scale: 3;
+  --grey: #8a8a8a;
+  --bg: #2b2b3a;
+  --text: #f2f2f2;
+}
+
+* { box-sizing: border-box; }
+
+/* Keeps pixel art crisp, never blurry. Applies to everything. */
+* { image-rendering: pixelated; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+  /* Placeholder is the flat color above. Real tile art replaces it below. */
+}
+/* When tile.png exists: repeat it, 16px sprite shown at 48px */
+.art-tile body {
+  background-image: var(--img-tile);
+  background-size: calc(16px * var(--scale));
+}
+
+main {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+h1 { font-size: 20px; margin: 0 0 12px; }
+
+#status { font-size: 8px; opacity: 0.7; margin: 0 0 16px; }
+
+/* ---------- Add form ---------- */
+#add-form { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
+
+#new-item {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 12px;
+  border: 3px solid #000;
+  background: #fff;
+}
+
+/* Add button: 16x16 sprite shown at 48x48. Grey box until art exists. */
+#add-btn {
+  width: calc(16px * var(--scale));
+  height: calc(16px * var(--scale));
+  padding: 0;
+  border: 0;
+  background: var(--grey);
+  background-size: 100% 100%;
+  cursor: pointer;
+}
+.art-btn-add #add-btn { background-image: var(--img-btn-add); background-color: transparent; }
+#add-btn:active { background: #5a5a5a; }
+.art-btn-add-pressed #add-btn:active {
+  background-image: var(--img-btn-add-pressed);
+  background-color: transparent;
+}
+
+/* ---------- List rows ---------- */
+#list { list-style: none; margin: 0; padding: 0; }
+
+/* Each row is a "panel". Placeholder: grey box.
+   With art: 9-slice, meaning the 8px corners stay crisp and the middle stretches. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: var(--grey);
+  color: #111;
+}
+.art-panel-row .row {
+  background: none;
+  border: calc(8px * var(--scale)) solid transparent;
+  border-image: var(--img-panel-row) 8 fill / calc(8px * var(--scale)) stretch;
+  padding: 0 4px;
+}
+
+.row .label { flex: 1; word-break: break-word; line-height: 1.4; }
+.row.done .label { text-decoration: line-through; opacity: 0.5; }
+
+/* Checkbox: 16x16 sprite at 48x48. Grey box until art exists. */
+.check {
+  width: calc(16px * var(--scale));
+  height: calc(16px * var(--scale));
+  flex: none;
+  padding: 0;
+  border: 3px solid #555;
+  background: #bbb;
+  background-size: 100% 100%;
+  cursor: pointer;
+}
+.row.done .check { background: #555; }
+.art-checkbox-empty .check { background-image: var(--img-checkbox-empty); border: 0; background-color: transparent; }
+.art-checkbox-ticked .row.done .check { background-image: var(--img-checkbox-ticked); }
+
+/* Delete button: plain text "x" for now (V1 has no delete sprite in the art list) */
+.del {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 3px solid #333;
+  background: transparent;
+  color: #111;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#empty { opacity: 0.6; text-align: center; margin-top: 32px; }
