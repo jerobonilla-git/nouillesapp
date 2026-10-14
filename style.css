@@ -68,6 +68,13 @@ h1 { font-size: 20px; margin: 0 0 12px; }
 }
 
 /* ---------- Home screen tiles ---------- */
+/* The whole Home screen lives in ONE centered column as wide as the tile pictures
+   (160px x2 = 320px). That way the status line, the title, the pictures and the labels
+   all share the same left edge and the same center line. On a very narrow phone the
+   column just shrinks to the screen width. */
+#home { width: min(calc(160px * 2), 100%); margin: 0 auto; }
+main:has(#home:not([hidden])) #status { width: min(calc(160px * 2), 100%); margin-left: auto; margin-right: auto; }
+
 /* Main feature tile (Courses, later Friends, Plants...): a FIXED-size 160x90 picture shown
    at x2 (320x180), with the name as plain text below it. Same size for every feature. */
 .feature-tile {
