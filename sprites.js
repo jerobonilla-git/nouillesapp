@@ -1,36 +1,66 @@
 // SPRITES: the ONE place that says which PNG file is used for what.
 //
-// To swap art: put your PNG in app/art/... with the name below.
-// That's it. No other code changes needed.
+// Each sprite has:
+//   n    = its number in art/ASSETS.md (the red "(n)" badge you see on screen)
+//   file = where the PNG lives
 //
-// If a PNG is missing, the app shows a grey box of the right size instead.
+// To swap art: replace the PNG in app/art/... keeping the SAME name. That's it.
+// No other code changes needed.
+//
+// Naming pattern: <screen>-<thing>-<state>.png
 
 const SPRITES = {
-  "panel-row":         "art/ui/panel-row.png",          // 24x24, 9-slice, 8px borders
-  "checkbox-empty":    "art/ui/checkbox-empty.png",     // 16x16
-  "checkbox-ticked":   "art/ui/checkbox-ticked.png",    // 16x16
-  "btn-add":           "art/ui/btn-add.png",            // 16x16
-  "btn-add-pressed":   "art/ui/btn-add-pressed.png",    // 16x16
-  "tile":              "art/backgrounds/tile.png",      // 16x16, repeats
-  "tile-feature":      "art/ui/tile-feature.png",       // 24x24, 9-slice, home screen tile
-  "tile-soon":         "art/ui/tile-soon.png",          // 24x24, 9-slice, greyed "coming soon" tile
+  "home-background":               { n: 1, file: "art/backgrounds/home-background.png" },               // 16x16, repeats
+  "home-tile":                     { n: 2, file: "art/ui/home-tile.png" },                              // 24x24, 9-slice
+  "home-tile-soon":                { n: 3, file: "art/ui/home-tile-soon.png" },                         // 24x24, 9-slice
+  "courses-row-panel":             { n: 4, file: "art/ui/courses-row-panel.png" },                      // 24x24, 9-slice
+  "courses-checkbox-empty":        { n: 5, file: "art/ui/courses-checkbox-empty.png" },                 // 16x16
+  "courses-checkbox-ticked":       { n: 6, file: "art/ui/courses-checkbox-ticked.png" },                // 16x16
+  "courses-add-button":            { n: 7, file: "art/ui/courses-add-button.png" },                     // 16x16
+  "courses-add-button-pressed":    { n: 8, file: "art/ui/courses-add-button-pressed.png" },             // 16x16
+  // n = 9 is icons/app-icon.png. It only shows on the phone home screen
+  // (listed in manifest.json), so there is no badge for it on screen.
 };
 
-// For each sprite, try to load the PNG.
-// If it loads, we tell the CSS two things:
-//   1. a variable like --img-btn-add holding the picture
-//   2. a class like "art-btn-add" on <html>, meaning "the real art exists"
-// The CSS uses that class to swap the grey box for the picture.
+// The placeholder PNGs are made with a known look: dark border pixel at the
+// corner (40,40,40) and grey fill pixel in the middle (138,138,138).
+// If a PNG still has that look, it is a placeholder, not real art yet.
+function isPlaceholder(img) {
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    const corner = ctx.getImageData(0, 0, 1, 1).data;
+    const middle = ctx.getImageData(canvas.width >> 1, canvas.height >> 1, 1, 1).data;
+    return corner[0] === 40 && corner[1] === 40 && corner[2] === 40 && corner[3] === 255 &&
+           middle[0] === 138 && middle[1] === 138 && middle[2] === 138 && middle[3] === 255;
+  } catch (e) {
+    return false;   // can't read the pixels: treat it as real art
+  }
+}
+
+// For each sprite we tell the CSS what happened, using classes on <html>:
+//   "art-<name>" = a PNG file loaded, so show it (even a grey placeholder one)
+//   "ph-<name>"  = still a placeholder (grey PNG, or no PNG at all): show the number badge
+// We also give the CSS a variable "--num-<name>" holding the "(n)" text for the badge.
+// And "--img-<name>" holding the picture itself.
 function loadSprites() {
+  const root = document.documentElement;
   for (const name in SPRITES) {
+    const sprite = SPRITES[name];
+    root.style.setProperty("--num-" + name, `"(${sprite.n})"`);
+
     const img = new Image();
     img.onload = () => {
-      const root = document.documentElement;
-      root.style.setProperty("--img-" + name, `url("${SPRITES[name]}")`);
+      root.style.setProperty("--img-" + name, `url("${sprite.file}")`);
       root.classList.add("art-" + name);
+      if (isPlaceholder(img)) root.classList.add("ph-" + name);
     };
-    // If it fails (file not drawn yet), we do nothing: the grey box stays.
-    img.src = SPRITES[name];
+    // No PNG at all: the CSS grey box stays, and it gets the badge too.
+    img.onerror = () => root.classList.add("ph-" + name);
+    img.src = sprite.file;
   }
 }
 
