@@ -5,6 +5,8 @@
   --grey: #8a8a8a;
   --bg: #2b2b3a;
   --text: #f2f2f2;
+  /* Strength of the dark layer over the background art (0 = none, 1 = black) */
+  --overlay: rgba(20, 20, 35, 0.5);
 }
 
 * { box-sizing: border-box; }
@@ -27,6 +29,18 @@ body {
 .art-home-background body {
   background-image: var(--img-home-background);
   background-size: calc(16px * var(--scale));
+}
+
+/* Readability layer: a dark see-through sheet fixed over the background art and under
+   everything else. It never moves anything (fixed, no size in the page flow).
+   Only turns on when the real or placeholder background PNG is loaded. */
+.art-home-background body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  z-index: -1;            /* below the page content, above the background picture */
+  pointer-events: none;   /* taps go straight through it */
 }
 
 main {
