@@ -43,7 +43,7 @@ const SPRITES = {
   "courses-row-panel": {
     n: 4,
     file: "art/ui/courses-row-panel.png",
-    size: "24x24",
+    size: "32x32",
     where: "Courses: behind every list item. Also behind the Undo bar",
     draw: "A 9-slice panel, 8px borders. Must stay readable with text on top.",
   },
