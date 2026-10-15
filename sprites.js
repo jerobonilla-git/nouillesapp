@@ -22,8 +22,8 @@ const SPRITES = {
   "home-background": {
     n: 1,
     file: "art/backgrounds/home-background.png",
-    size: "16x16",
-    where: "Behind every screen, repeated all over",
+    size: "32x32",
+    where: "Behind every screen, repeated all over, shown at x2 (64px)",
     draw: "A seamless tile (edges must match when repeated). Keep it calm so text stays readable. Badge sits in the bottom-left of the screen.",
   },
   "home-tile-courses": {

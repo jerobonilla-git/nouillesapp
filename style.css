@@ -25,10 +25,10 @@ body {
   font-size: 12px;
   /* Placeholder is the flat color above. Real tile art replaces it below. */
 }
-/* When tile.png exists: repeat it, 16px sprite shown at 48px */
+/* When home-background.png exists: repeat it. It is a 32x32 sprite shown at x2 (64px). */
 .art-home-background body {
   background-image: var(--img-home-background);
-  background-size: calc(16px * var(--scale));
+  background-size: calc(32px * 2);   /* the PNG is 32x32 and shows at x2 = 64px, so every pixel is an exact 2x2 block */
 }
 
 /* Readability layer: a dark see-through sheet fixed over the background art and under
